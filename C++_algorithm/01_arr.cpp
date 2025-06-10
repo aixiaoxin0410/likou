@@ -1,9 +1,115 @@
 #include<iostream>
 #include<stdlib.h>
 #include<ctime>
+#include<cstring>
 using namespace std;
 
+// 整形数组，把偶数调整到数组的左边，把奇数调整到数组的右边
+void AdjustArray(int arr[], int size)
+{
+    int *p = arr;
+    int *q = arr + size -1;
+    // while (p<q)
+    // {
+    //     if((*p & 0x1) == 0)
+    //     {
+    //         p++;
+    //         continue;
+    //     }
+    //     if((*q & 0x1) == 1)
+    //     {
+    //         q--;
+    //         continue;
+    //     }
 
+    //     int temp = *p;
+    //     *p = *q;
+    //     *q = temp;
+
+    //     p++;
+    //     q--;
+    // }
+    while (p<q)
+    {
+        while (p<q)
+        {
+            // p从左往右寻找奇数
+            if((*p & 0x1) == 1)
+            {
+                break;
+            }
+            p++;
+        }
+        while (p<q)
+        {
+            // q从右往左寻找偶数
+            if((*q & 0x1) == 0)
+            {
+                break;
+            }
+            q--;
+        }
+        if(p<q)
+        {
+            int temp = *p;
+            *p = *q;
+            *q = temp;
+
+            p++;
+            q--;
+        }      
+    }
+}
+
+int main()
+{
+    int arr[10] = {0};
+    srand(time(0));
+    for(int i=0;i<sizeof(arr)/sizeof(arr[0]);i++)
+    {
+        arr[i] = rand()%100;
+    }
+
+    for(int v:arr)
+    {
+        cout << v << " ";
+    }
+    cout << endl;
+
+    AdjustArray(arr,sizeof(arr)/sizeof(arr[0]));
+
+        for(int v:arr)
+    {
+        cout << v << " ";
+    }
+    cout << endl;
+}
+
+
+#if 0
+// 逆序字符串
+void Rerverse(char arr[], int size)
+{
+    char *p = arr;
+    char *q = arr + size -1;
+    while (p<q)
+    {
+        char ch = *p;
+        *p = *q;
+        *q = ch;
+        p++;
+        q--;
+    }   
+}
+int main()
+{
+    char arr[] = "hello world";
+    Rerverse(arr, strlen(arr));
+    cout << arr << endl;
+}
+#endif
+
+#if 0 
 class Array
 {
 public:
@@ -130,3 +236,5 @@ int main()
 
     return 0;
 }
+#endif
+
