@@ -55,6 +55,27 @@ public:
         head->next = node;
     }
 
+    // 链表节点的删除
+    void Remove(int val)
+    {
+        Node* q = head;
+        Node* p = head->next;
+        while(p!= nullptr)
+        {
+            if(p->data == val)
+            {
+                q->next = p->next;
+                delete p;
+                return;
+            }
+            else
+            {
+                q = p;
+                p = p->next;
+            }
+        }
+    }
+
     // 打印链表函数
     void Show()
     {
@@ -90,6 +111,14 @@ int main()
         cout << val << " ";
     }
     cout << endl;
+    slink.Show();
+
+    slink.InsertHead(12000);
+    slink.InsertHead(100);
+    slink.InsertTail(1555);
+    slink.Show();
+
+    slink.Remove(12000);
     slink.Show();
 
     return 0;
