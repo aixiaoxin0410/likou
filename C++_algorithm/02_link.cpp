@@ -24,7 +24,15 @@ public:
     }
     ~Slink()
     {
-            // 节点的释放
+        // 节点的释放
+        Node* p = head;
+        while(p!=nullptr)
+        {
+            head = head->next;
+            delete[] p;
+            p = head;
+        }
+        head = nullptr;
     }
 
     // 链表的尾插法 O(n)
@@ -67,6 +75,27 @@ public:
                 q->next = p->next;
                 delete p;
                 return;
+            }
+            else
+            {
+                q = p;
+                p = p->next;
+            }
+        }
+    }
+
+    // 删除多个节点
+    void RemoveAll(int val)
+    {
+        Node* p = head;
+        Node* q = head->next;
+        while(p!= nullptr)
+        {
+            if(p->data == val)
+            {
+                q->next = p->next;
+                delete p;
+                p = q->next;
             }
             else
             {
@@ -119,6 +148,17 @@ int main()
     slink.Show();
 
     slink.Remove(12000);
+    slink.Show();
+
+    slink.InsertTail(111);
+    slink.InsertTail(111);
+    slink.InsertTail(111);
+    slink.InsertHead(111);
+    slink.InsertHead(111);
+    slink.Show();
+
+    
+    slink.RemoveAll(111);
     slink.Show();
 
     return 0;
