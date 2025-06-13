@@ -63,7 +63,7 @@ public:
         head->next = node;
     }
 
-    // 链表节点的删除
+    // 链表节点的删除 O(n)
     void Remove(int val)
     {
         Node* q = head;
@@ -72,6 +72,7 @@ public:
         {
             if(p->data == val)
             {
+                // 删除一个节点本身的操作   O(1)
                 q->next = p->next;
                 delete p;
                 return;
@@ -84,7 +85,7 @@ public:
         }
     }
 
-    // 删除多个节点
+    // 删除多个节点 
     void RemoveAll(int val)
     {
         Node* p = head;
@@ -104,6 +105,23 @@ public:
             }
         }
     }
+    // 搜索 O(n)
+    bool Find(int val)
+    {
+        Node * p = head->next;
+        while(p!=nullptr)
+        {
+            if(p->data == val)
+            {
+                return true;
+            }
+            else
+            {
+                p = p->next;
+            }
+        }
+        return false;
+    }
 
     // 打印链表函数
     void Show()
@@ -118,8 +136,52 @@ public:
     }
 private:
     Node* head; // 指向链表的头节点
+    friend void ReverseLink(Slink &slink);
 };
 
+// 单链表逆序
+void ReverseLink(Slink &slink)
+{
+    Node * head = slink.head;
+    Node * p = head->next;
+    if(p == nullptr)
+    {
+        return;
+    }
+
+    head->next = nullptr;
+
+    while(p!=nullptr)
+    {
+        Node* q = p->next;
+        p->next = head->next;
+        head->next = p;
+
+        p = q ;
+    }
+
+    
+
+}
+
+int main()
+{
+    srand(time(0));
+    Slink slink;
+    for(int i =0 ;i<10;i++)
+    {
+        int val = rand()%100;
+        slink.InsertTail(val);
+    }
+    slink.Show();
+
+    ReverseLink(slink);
+    slink.Show();
+}
+
+
+
+#if 0 
 int main()
 {
     srand(time(0));
@@ -163,5 +225,5 @@ int main()
 
     return 0;
 }
-
+#endif
 
