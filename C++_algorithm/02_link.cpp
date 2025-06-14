@@ -29,7 +29,7 @@ public:
         while(p!=nullptr)
         {
             head = head->next;
-            delete[] p;
+            delete p;
             p = head;
         }
         head = nullptr;
@@ -137,6 +137,8 @@ public:
 private:
     Node* head; // 指向链表的头节点
     friend void ReverseLink(Slink &slink);
+    friend bool GetLastKNode(Slink &slink, int k , int &val);
+    friend void MergeLink(Slink &slink1, Slink &slink2);
 };
 
 // 单链表逆序
@@ -159,11 +161,40 @@ void ReverseLink(Slink &slink)
 
         p = q ;
     }
-
-    
-
 }
 
+// 单链表倒数第k个节点
+bool GetLastKNode(Slink &slink, int k , int &val)
+{
+    Node* head = slink.head;
+    Node* pre = head;
+    Node* p = head;
+
+    if(k<1)
+    {
+        return false;
+    }
+
+    for(int i = 0; i<k; i++)
+    {
+        p = p->next;
+        if(p == nullptr)
+        {
+            return false;
+        }
+    }
+
+    while(p!= nullptr)
+    {
+        pre = pre->next;
+        p = p->next;
+    }
+
+    val = pre->data;
+    return true;
+}
+
+#if 0
 int main()
 {
     srand(time(0));
@@ -177,9 +208,77 @@ int main()
 
     ReverseLink(slink);
     slink.Show();
+
+    int val;
+    int k = 0;
+    if(GetLastKNode(slink, k, val))
+    {
+        cout << "倒数第" << k << "个节点的数值为：" << val;
+    }
+}
+#endif
+
+// 合并两个有序的单链表
+void MergeLink(Slink &slink1, Slink &slink2)
+{
+    Node* last = slink1.head;
+    Node* p = slink1.head->next;
+    Node* q = slink2.head->next;
+    slink2.head->next = nullptr; // 不加这句代码，析构函数会出错的。
+                                //  因为这里链表2的head没有和原来的第一个节点断联，他同时指向两个数据
+
+    while(p!=nullptr && q!=nullptr)
+    {
+        if(q->data < p->data)
+        {
+            last->next = q;
+            q = q->next;
+            last = last->next;
+        }
+        else
+        {
+            last->next = p;
+            p = p->next;
+            last = last->next;
+        }
+    }
+
+    if(q == nullptr)
+    {
+        last->next = p;
+    }
+
+    if(p == nullptr)
+    {
+        last->next = q;
+    }
 }
 
+int main()
+{
+    int arr1[] = {25, 37, 52, 78};
+    int arr2[] = {13, 23, 40, 56, 84, 95, 106};
 
+    Slink slink1;
+    Slink slink2;
+
+    for(int v:arr1)
+    {
+        slink1.InsertTail(v);    
+    }
+
+    for(int v:arr2)
+    {
+        slink2.InsertTail(v);    
+    }
+
+    slink1.Show();
+    slink2.Show();
+
+    MergeLink(slink1,slink2);
+    slink1.Show();
+    slink2.Show(); 
+}
 
 #if 0 
 int main()
