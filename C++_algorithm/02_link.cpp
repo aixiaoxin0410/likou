@@ -254,6 +254,134 @@ void MergeLink(Slink &slink1, Slink &slink2)
     }
 }
 
+// 判断单链表是否存在环，存在返回环的入口节点
+bool IsLinkHasCircle(Node *head, int &val)
+{
+    Node* fast = head;
+    Node* slow = head;
+
+    while (fast!= nullptr && fast->next != nullptr)
+    {
+        fast = fast->next->next;
+        slow = slow->next;
+
+        if(fast == slow)
+        {
+            fast = head;
+            while (fast != slow)
+            {
+                fast = fast->next;
+                slow = slow->next;
+            }
+            val = fast->data;
+            return true;
+        }
+    }
+    return false;
+    
+}
+
+#if 0
+int main()
+{
+    Node* head = new Node();
+    Node n1(25),n2(67),n3(32),n4(18),n5(46);
+    head->next = &n1;
+    n1.next = &n2;
+    n2.next = &n3;
+    n3.next = &n4;
+    n4.next = &n5;
+    n5.next = &n1;
+
+    int val;
+    if(IsLinkHasCircle(head,val))
+    {
+        cout << "链表存在环，环的入口节点是：" << val << endl;
+    }
+    else
+    {
+        cout << "链表不存在环。" << endl;
+    }
+}
+#endif
+
+// 判断两个单链表是否相交，返回相交节点的值
+bool IsLinkHasMerge(Node* head1,Node* head2, int &val)
+{
+    int cnt1 = 0, cnt2 = 0;
+    Node *p = head1;
+    Node *q = head2;
+    while (p!=nullptr)
+    {
+        p = p->next;
+        cnt1++;
+    }
+
+    while (q!=nullptr)
+    {
+        q = q->next;
+        cnt2++;
+    }
+
+    p = head1;
+    q = head2;
+    
+    if(cnt1<cnt2)
+    {
+        int offset = cnt2 - cnt1;
+        while (offset-- > 0)
+        {
+            q = q->next;
+        }      
+    }
+    else
+    {
+        int offset = cnt1 - cnt2;
+        while (offset-- > 0)
+        {
+            p = p->next;
+        }
+    }
+    
+    while (p!=nullptr && q!=nullptr)
+    {
+        if (p == q)
+        {
+            val = p->data;
+            return true;
+        }
+        p = p->next;
+        q = q->next;    
+    }
+    return false;
+}
+
+int main()
+{
+    Node* head1 = new Node();
+    Node* head2 = new Node();
+    Node n1(25),n2(67),n3(32),n4(18);
+    Node n5(32);
+    head1->next = &n1;
+    n1.next = &n2;
+    n2.next = &n3;
+    n3.next = &n4;
+
+    head2->next = &n5;
+    n5.next = &n1;
+    
+    int val;
+    if(IsLinkHasMerge(head1, head2, val))
+    {
+        cout << "两个单链表存在相交，相交节点的值为：" << val << endl;
+    }
+    else
+    {
+        cout << "两个单链表不存在相交。" << endl;
+    }
+}
+
+#if 0 
 int main()
 {
     int arr1[] = {25, 37, 52, 78};
@@ -279,6 +407,8 @@ int main()
     slink1.Show();
     slink2.Show(); 
 }
+#endif
+
 
 #if 0 
 int main()
