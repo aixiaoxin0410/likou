@@ -1,148 +1,94 @@
 #include<iostream>
 using namespace std;
-#include<ctime>
 
-// 定义双向循坏链表的节点类型
-struct Node
-{
-    Node(int data =0)
-        : data(data)
-        , next(nullptr)
-        , pre(nullptr)
-    {}
-    int data;
-    Node* next;
-    Node* pre;
-};
-
-//双向循坏链表
-class DoubleCircleLink
+// 顺序栈 c++容器适配器 stack
+class SeqStack
 {
 public:
-    DoubleCircleLink()
-    {
-        head = new Node();
-        head->next = head;
-        head->pre = head;
-    }
-    ~DoubleCircleLink()
-    {
-        Node* p = head->next;
-        while(p != head)
+    SeqStack(int size =10)
+        :mtop(0)
+        ,mcap(size)
         {
-            head->next = p->next;
-            p->next->pre = head;
-            delete p;
-            p = head->next;
+            mpStack = new int[mcap];
         }
-        delete head;
-        head = nullptr;
+    ~SeqStack()
+    {
+        delete[] mpStack;
+        mpStack = nullptr;
     }
 
-    // 头插法 O(1)
-    void InsertHead(int val)
+    // 入栈
+    void push(int val)
     {
-        Node* node = new Node(val);
-        node->next = head->next;
-        node->pre = head;
-        head->next->pre = node;
-        head->next = node; 
-    }
-
-    // 尾插法 O(1)
-    void InsertTail(int val)
-    {
-        Node* p = head->pre;
-        Node* node = new Node(val);
-        node->pre = p;
-        p->next = node;
-        node->next = head;
-        head->pre = node;
-    }
-
-    // 节点删除
-    void Remove(int val)
-    {
-        Node* p = head->next;
-        while(p!= head)
+        if( mcap == mtop)
         {
-            if(p->data == val)
-            {
-                p->pre->next = p->next;
-                p->next->pre = p->pre;
-                // 注释是删除多个节点的
-                // Node* next = p->next;
-                delete p;
-                // p = next;
-                return;
-            }
-            else
-            {
-                p = p->next;
-            }
+            expand(2*mtop);
         }
+        mpStack[mtop++] = val;
     }
 
-    // 查询
-    bool Find(int val)
+    // 出栈
+    void pop()
     {
-        Node* p = head->next;
-        while(p!=head)
+        if(mtop == 0)
         {
-            if(p->data == val)
-            {
-                return true;
-            }
-            else
-            {
-                p = p->next;
-            }
+            throw "stack is empty!";
         }
-        return false;
+        mtop--;
     }
 
-    // 展示
-    void Show()
+    // 获取栈顶元素
+    int top() const
     {
-        Node* p = head->next;
-        while(p!=head)
+        if(mtop==0)
         {
-            cout << p->data << " ";
-            p = p->next;
+            throw "stack is empty!";
         }
-        cout << endl;
+        return mpStack[mtop-1];
     }
-    
+
+    // 栈空
+    bool empty() const
+    {
+        return mtop == 0;
+    }
+
+    // 栈大小
+    int size() const
+    {
+        return mtop;
+    }
+
 private:
-    Node* head;
+    void expand(int size)
+    {
+        int* p = new int[size];
+        memcpy(p,mpStack,sizeof(int)*mtop);
+        delete[] mpStack;
+        mpStack = p;
+        mcap = size;
+    }
+
+private:
+    int* mpStack;
+    int mtop;   // 栈顶位置
+    int mcap;   // 栈容量
 };
 
 int main()
 {
-
-    DoubleCircleLink dclink;
-
-    dclink.InsertHead(1111);
-    dclink.InsertHead(1111);
-    dclink.InsertHead(2222);
-
-    dclink.Show();
-
-    dclink.InsertTail(888);
-    dclink.InsertTail(4444);
-    dclink.InsertTail(888);
-    dclink.Show();
-    
-    dclink.Remove(888);
-    dclink.Show();
-    
-    if(dclink.Find(888))
+    int arr[] = {12,4,56,7,89,31,53,75};
+    SeqStack s;
+    for(int v:arr)
     {
-        cout << "找到了" << endl;
+        s.push(v);
     }
-    else
+
+    while(!s.empty())
     {
-        cout << "没有找到" << endl;
+        cout << s.top() << endl;
+        s.pop();
     }
+    cout << endl;
     return 0;
 }
