@@ -5,7 +5,7 @@ using namespace std;
 class LinkStack
 {
 public:
-    LinkStack()
+    LinkStack(): size_(0)
     {
         head = new Node();
     }
@@ -26,7 +26,7 @@ public:
         Node* node = new Node(val);
         node->next = head->next;
         head->next = node;
-        
+        size_++;
     }
 
     // 出栈 O(1)
@@ -37,6 +37,7 @@ public:
         Node *p = head->next;
         head->next = p->next;
         delete p;
+        size_--;
     }
 
     // 获取栈顶元素
@@ -72,7 +73,7 @@ private:
     };
     
     Node* head;
-    int size;
+    int size_;
 };
 
 
