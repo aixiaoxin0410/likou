@@ -1,0 +1,87 @@
+#include<iostream>
+using namespace std;
+
+// 链式栈
+class LinkStack
+{
+public:
+    LinkStack()
+    {
+        head = new Node();
+    }
+    ~LinkStack()
+    {
+        Node* p = head;
+        while(p!=nullptr)
+        {
+            head = head->next;
+            delete p;
+            p = head;
+        }
+    }
+
+    // 入栈 O(1)
+    void push(int val)
+    {
+        Node* node = new Node(val);
+        node->next = head->next;
+        head->next = node;
+        
+    }
+
+    // 出栈 O(1)
+    void pop()
+    {
+        if(head->next == nullptr)
+            throw "stack is empty!";
+        Node *p = head->next;
+        head->next = p->next;
+        delete p;
+    }
+
+    // 获取栈顶元素
+    int top() const
+    {
+        if(head->next == nullptr)
+            throw "stack is empty!"; 
+        return head->next->data;
+    }
+
+    // 判空
+    bool empty() const
+    {
+        return head->next == nullptr;
+    }
+
+private:
+    struct Node
+    {
+        Node(int data = 0)
+            : data(data)
+            , next(nullptr)
+            {}
+        int data;
+        Node* next;
+    };
+    
+    Node* head;
+};
+
+
+int main()
+{
+    int arr[] = {12,4,56,7,89,31,53,75};
+    LinkStack ls;
+    for(int v:arr)
+    {
+        ls.push(v);
+    }
+
+    while(!ls.empty())
+    {
+        cout << ls.top() << endl;
+        ls.pop();
+    }
+    cout << endl;
+    return 0;
+}
