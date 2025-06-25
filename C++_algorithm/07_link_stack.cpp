@@ -58,7 +58,7 @@ public:
     // 想达到 O(1)
     int size() const 
     {
-
+        return size_;
     }
 
 private:
@@ -86,11 +86,17 @@ int main()
         ls.push(v);
     }
 
+    int a = ls.size();
+    cout << "栈的个数为：" << a << endl;
+    
     while(!ls.empty())
     {
         cout << ls.top() << endl;
         ls.pop();
     }
     cout << endl;
+
+
+
     return 0;
 }
