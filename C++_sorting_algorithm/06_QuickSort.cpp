@@ -8,7 +8,7 @@ int partation(int arr[], int l,int r)
     int val = arr[l];
 
     // 一次快排处理 O(n) * O(logn) = O(nlogn) log是以2为底的
-    // 空间复杂度：O(logn) 递归的深度所占用的栈内存
+    // 空间复杂度：O(logn) —— O(n) 递归的深度所占用的栈内存
     // 最坏的时间复杂度：O(n^2) 
     while (l<r)
     {
