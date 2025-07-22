@@ -30,7 +30,7 @@ void siftdown(int arr[], int i, int size)
     arr[i] = val;
 }
 
-void headsort(int arr[],int size) // O(logn) * O(n) = O(nlogn) 不稳定
+void heapsort(int arr[],int size) // O(logn) * O(n) = O(nlogn) 不稳定
 {
     int n = size - 1;
     // 从第一个非叶子节点
@@ -61,7 +61,7 @@ int main()
     }
     cout << endl;
 
-    headsort(arr, sizeof(arr)/sizeof(arr[0]) - 1);
+    heapsort(arr, sizeof(arr)/sizeof(arr[0]) - 1);
 
     for(int v : arr)
     {
