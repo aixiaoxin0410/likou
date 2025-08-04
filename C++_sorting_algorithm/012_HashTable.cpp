@@ -7,7 +7,7 @@ using namespace std;
 enum State
 {
     STATE_UNUSE, // 从未使用过的桶
-    STATE_USE, // 正在使用的桶
+    STATE_USING, // 正在使用的桶
     STATE_DEL, // 元素被删掉的桶
 };
 
@@ -58,6 +58,110 @@ public:
             table_ = nullptr;
         }
 
+    // 插入元素
+    bool insert(int key)
+    {
+        double factor = UseBacketNum * 1.0 / TableSize;
+        cout << "factor: " << factor << endl;
+
+        // 考虑扩容
+        if(factor > LoadFactor_)
+        {
+            expand();
+        }
+
+        int idx = key % TableSize;
+
+        int i = idx;
+        do
+        {
+            if(table_[i].state_ != STATE_USING)
+            {
+                table_[i].key_ = key;
+                table_[i].state_ = STATE_USING;
+                UseBacketNum++;
+                return true;
+            }
+            i = (i + 1) % TableSize;
+        } while (i != idx);
+        
+        return false;
+    }
+    
+    // 删除元素
+    bool erase(int key)
+    {
+        int idx = key % TableSize;
+
+        int i = idx;
+        do
+        {
+            if(table_[i].key_ == key && table_[i].state_ == STATE_USING)
+            {
+                table_[i].state_ = STATE_DEL;
+                UseBacketNum--;
+            }
+            i = (i + 1) % TableSize;
+        } while (table_[i].state_ != STATE_UNUSE && i != idx);
+        
+        return true;      
+    }
+
+    // 查询
+    bool find(int key)
+    {
+        int idx = key % TableSize;
+
+        int i = idx;
+        do
+        {
+            if(table_[i].key_ == key && table_[i].state_ == STATE_USING)
+            {
+                return true;
+            }
+            i = (i + 1) % TableSize;
+        } while (table_[i].state_ != STATE_UNUSE && i != idx);
+        
+        return false;            
+    }
+
+private:
+    void expand()
+    {
+        ++primeIdx;
+        if(primeIdx == PRIME_SIZE)
+        {
+            throw "HashTable is too large, can not expand anymore !";
+        }
+
+        Bucket* newtable_ = new Bucket[primes_[primeIdx]];
+
+        // 旧表有效的数据，重新哈希放到扩容后的新表
+        for(int i = 0; i < TableSize; i++)
+        {
+            if(table_[i].state_ == STATE_USING)
+            {
+                int idx = table_[i].key_ % primes_[primeIdx];
+
+                int k = idx;
+                do
+                {
+                    if(newtable_[k].state_ != STATE_USING)
+                    {
+                        newtable_[k].state_ = STATE_USING;
+                        newtable_[k].key_ = table_[i].key_;
+                        break;
+                    }
+                    k = (k + 1) % primes_[primeIdx];
+                } while (k != idx);   
+            }   
+        }
+
+        delete[] table_;
+        table_ = newtable_;
+        TableSize = primes_[primeIdx];
+    }
+
 private:
     Bucket * table_; // 指向动态开辟的哈希表
     int TableSize; // 哈希表当前的长度
@@ -74,24 +178,15 @@ int HashTable::primes_[PRIME_SIZE] = {3,7,23,47,97,251,443,991,1471,42773};
 
 int main()
 {
-    srand(time(0));
-    int arr[10];
-    for(int i = 0 ;i < 10; i ++)
-    {
-        arr[i] = rand()% 100;
-        cout << arr[i] << " ";
-    }
-    cout << endl;
+    HashTable ht;
+    ht.insert(11);
+    ht.insert(22);
+    ht.insert(33);
+    ht.insert(44);
+    ht.insert(55);
 
-    arr[9] = -123;
-    arr[6] = -38;
-
-    // RadixSort(arr, sizeof(arr)/sizeof(arr[0]));
-
-    for(int v : arr)
-    {
-        cout << v << " ";
-    }
-    cout << endl;
+    cout << ht.find(55) << endl;
+    ht.erase(55);
+    cout << ht.find(55) << endl;
     return 0;
 }
