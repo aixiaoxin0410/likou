@@ -4,6 +4,7 @@ using namespace std;
 #include<vector>
 #include<unordered_map>
 #include<unordered_set>
+#include<memory>
 
 #if 0 
 int main()
@@ -61,11 +62,11 @@ int main()
     }
     return 0;
 }
-# endif
+
 
 int main()
 {
-    string src = "aapoojwtpja";
+    string src = "aapoo jwtpja";
     unordered_map<char, int> um;
     for(auto ch : src)
     {
@@ -91,4 +92,41 @@ int main()
 
     cout << "所有字符都重复出现过！" << endl;
     return 0;
+}
+
+# endif
+
+// 位图算法
+int main()
+{
+    vector<int> vec{12, 78, 90, 123, 8 ,9, 90, 12};
+    int max = vec[0];
+    for(int i = 1; i < vec.size(); i++)
+    {
+        if(vec[i] > max)
+        {
+            max = vec[i];
+        }
+    }
+
+    // cout << max << endl;
+    int *bitmap = new int[max / 32 + 1](); // 初始化
+    unique_ptr<int> pre(bitmap);
+
+    // 找第一个重复出现的数字
+    for(auto key : vec)
+    {
+        int index = key / 32;
+        int offset = key % 32;
+        if(0 == ( bitmap[index] & (1 << offset) ) )
+        {
+            bitmap[index] |= (1 << offset);
+        }
+        else
+        {
+            // cout << key << " 是第一个重复出现的数字" << endl;
+            // return 0;
+            cout << key << " 重复出现过" << endl; 
+        }
+    }
 }
