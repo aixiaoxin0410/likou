@@ -14,7 +14,7 @@ public:
         }
 
 public:
-    // 添加元素
+    // 添加元素 O(1)
     void setBit(const char* str)
     {
         // 计算 k 组哈希函数的值
@@ -40,7 +40,7 @@ public:
 
     }
 
-    // 查询元素
+    // 查询元素 O(1)
     bool getBit(const char* str)
     {
         // 计算 k 组哈希函数的值
