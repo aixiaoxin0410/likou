@@ -39,7 +39,14 @@
     "sstream": "cpp",
     "stdexcept": "cpp",
     "streambuf": "cpp",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "list": "cpp",
+    "unordered_set": "cpp",
+    "functional": "cpp",
+    "iterator": "cpp",
+    "set": "cpp",
+    "iomanip": "cpp",
+    "map": "cpp"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
