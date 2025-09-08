@@ -125,6 +125,16 @@ public:
         return result;
     }
 
+    // 添加输出流操作符重载，使得 cout << MD5(...) 可以工作
+    friend std::ostream& operator<<(std::ostream& os, MD5& md5_obj) {
+        return os << md5_obj.hexdigest();
+    }
+    
+    // 为const对象也添加重载
+    friend std::ostream& operator<<(std::ostream& os, const MD5& md5_obj) {
+        return os << md5_obj.hexdigest();
+    }
+
 private:
     void init() {
         finalized = false;
