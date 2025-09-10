@@ -153,6 +153,29 @@ public:
         return false;
     }
 
+    // 递归前序遍历操作
+    void PreOrder()
+    {
+        cout << "[递归]前序遍历";
+        PreOrder(root_);
+        cout << endl;
+    }
+
+    // 递归中序遍历操作
+    void InOrder()
+    {
+        cout << "[递归]中序遍历";
+        InOrder(root_);
+        cout << endl;
+    }
+
+    // 递归后序遍历操作
+    void PostOrder()
+    {
+        cout << "[递归]后序遍历";
+        PostOrder(root_);
+        cout << endl;
+    }
 private:
     struct Node
     {
@@ -166,6 +189,39 @@ private:
         Node* left_; // 右孩子域
     };
     
+    // 递归前序遍历的实现 VLR
+    void PreOrder(Node* node)
+    {
+        if(node != nullptr)
+        {
+            cout << node->data_ << " "; //操作 V
+            PreOrder(node->left_); // L
+            PreOrder(node->right_); // R
+        }
+    }
+
+    // 递归中序遍历的实现 LVR
+    void InOrder(Node* node)
+    {
+        if(node != nullptr)
+        {
+            InOrder(node->left_); // 操作L
+            cout << node->data_ << " "; // V
+            InOrder(node->right_); // R
+        }
+    }
+
+    // 递归后序遍历的实现 LRV
+    void PostOrder(Node* node)
+    {
+        if(node != nullptr)
+        {
+            PostOrder(node->left_); // L
+            PostOrder(node->right_); // R
+            cout << node->data_ << " "; // V
+        }
+    }
+
     Node* root_; // 指向BST树的根节点
     Compare comp_; // 定义一个函数对象
 };
@@ -179,13 +235,16 @@ int main()
         bst.n_insert(v);
     }
 
-    cout << bst.n_query(12) << endl;
-    bst.n_insert(12);
-    cout << bst.n_query(12) << endl;
-    bst.n_remove(12);
-    bst.n_remove(24);
-    bst.n_remove(58);
-    cout << bst.n_query(12) << endl;
+    // cout << bst.n_query(12) << endl;
+    // bst.n_insert(12);
+    // cout << bst.n_query(12) << endl;
+    // bst.n_remove(12);
+    // bst.n_remove(24);
+    // bst.n_remove(58);
+    // cout << bst.n_query(12) << endl;
+    bst.PreOrder();
+    bst.InOrder();
+    bst.PostOrder();
 
     return 0;
 }
