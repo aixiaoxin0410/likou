@@ -46,6 +46,34 @@ public:
         cout << endl; 
     }
 
+    // 非递归中序遍历操作 LVR
+    void n_InOrder()
+    {
+        cout << "[非递归]中序遍历：";
+        if(root_ == nullptr)
+        {
+            return;
+        }
+        stack<Node*> s;
+        Node* cur = root_;
+        while (!s.empty() || cur != nullptr)
+        { 
+            if(cur != nullptr)  
+            {
+                s.push(cur);
+                cur = cur->left_;
+            }
+            else
+            {
+                Node* top = s.top();
+                s.pop();
+                cout << top->data_ << " "; 
+                cur = top->right_;
+            }
+        }
+        cout << endl; 
+    }
+
 private:
     struct Node
     {
@@ -98,5 +126,6 @@ int main()
     }
 
     bst.n_PreOrder();
+    bst.n_InOrder();
     return 0;
 }
