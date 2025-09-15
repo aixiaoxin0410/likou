@@ -2,6 +2,7 @@
 using namespace std;
 #include <functional>  // 添加这个头文件
 #include<stack>
+#include<queue>
 
 // BST树代码实现
 template<typename T, typename Compare=less<T>>
@@ -74,6 +75,60 @@ public:
         cout << endl; 
     }
 
+    // 非递归后序排序操作 LRV -> VRL
+    void n_PostOrder()
+    {
+        cout << "[非递归]后序遍历：";    
+        if(root_ == nullptr)
+        {
+            return;
+        }   
+        stack<Node*> s1;
+        stack<Node*> s2;
+        s1.push(root_);
+        while(!s1.empty())
+        {
+            Node* top = s1.top();
+            s1.pop();
+            s2.push(top);
+            if(top->left_ != nullptr)
+            {
+                s1.push(top->left_);
+            }
+            if(top->right_ != nullptr)
+            {
+                s1.push(top->right_);
+            }       
+        }
+        
+    }
+
+    // 非递归层序排序遍历操作
+    void n_LevelOrder()
+    {
+        cout << "[非递归]层序遍历：";  
+        if(root_ == nullptr)
+        {
+            return;
+        }
+        queue<Node*> que;
+        que.push(root_);
+        while (!que.empty())
+        {
+            Node* front = que.front();
+            que.pop();
+            cout << front->data_ << " ";
+            if(front->left_ != nullptr)
+            {
+                que.push(front->left_);
+            }
+            if(front->right_ != nullptr)
+            {
+                que.push(front->right_);
+            }
+        }
+    }
+
 private:
     struct Node
     {
@@ -127,5 +182,6 @@ int main()
 
     bst.n_PreOrder();
     bst.n_InOrder();
+    bst.n_LevelOrder();
     return 0;
 }
