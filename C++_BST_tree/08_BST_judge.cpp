@@ -136,6 +136,35 @@ public:
         FindValues(root_,vec,i,j);
     }
 
+    // 判断一颗二叉树是否是BST树
+    bool IsBSTree_error()
+    {
+        return IsBSTree_error(root_);
+    }
+
+    bool IsBSTree_true()
+    {
+        Node* pre = nullptr;
+        return IsBSTree_true(root_,pre);
+    }
+
+    void test() // 测试是否是BST树
+    {
+        BSTree<T> bst;
+        bst.root_ = new Node(40);
+        Node* node1 = new Node(20);
+        Node* node2 = new Node(60);
+        Node* node3 = new Node(30);
+        Node* node4 = new Node(80);
+        bst.root_->left_ = node1;
+        bst.root_->right_ = node2;
+        node2->left_ = node3;
+        node2->right_ = node4;
+
+        // cout << bst.IsBSTree_error() << endl;
+        cout << bst.IsBSTree_true() << endl;
+    }
+
 private:
     struct Node
     {
@@ -196,6 +225,51 @@ private:
         }
     }
 
+    // 判断一颗二叉树是否是BST树操作实现
+    bool IsBSTree_error(Node* node) //错误的代码
+    {
+        if(node == nullptr)
+        {
+            return true;
+        }
+        // V
+        if(node->left_ != nullptr && comp_(node->data_,node->left_->data_))
+        {
+            return false;
+        }
+        if(node->right_ != nullptr && comp_(node->right_->data_,node->data_))
+        {
+            return false;
+        }
+        return IsBSTree_error(node->left_); // L 判断当前节点的左子树    
+        return IsBSTree_error(node->right_); // R 判断当前节点的右子树
+    }
+
+    // 判断一颗二叉树是否是BST树实现，利用BST树中序遍历是一个升序的特点
+    bool IsBSTree_true(Node* node, Node*& pre) 
+    {
+        if(node == nullptr)
+        {
+            return true;
+        }
+        if(!IsBSTree_true(node->left_,pre)) // L 主要判断递归结束的条件
+        {
+            return false;
+        } 
+        // V
+        if(pre != nullptr)
+        {
+            if(comp_(node->data_,pre->data_)) // 主要判断递归结束的条件
+            {
+                return false;
+            }
+        }
+        pre = node; // 更新中序遍历的前驱节点
+
+        return IsBSTree_true(node->right_,pre); // R
+    }
+
+
     Node* root_; // 指向BST树的根节点
     Compare comp_; // 定义一个函数对象
 };
@@ -221,5 +295,9 @@ int main()
         cout << v << " ";
     }
     cout << endl;
+
+    // cout << bst.IsBSTree_error() << endl;
+    bst.test();
+
     return 0;
 }
