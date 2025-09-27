@@ -101,7 +101,11 @@ public:
                 s1.push(top->right_);
             }       
         }
-        
+        while(!s2.empty())
+        {
+            cout << s2.top()->data_ << " ";
+            s2.pop();
+        }
     }
 
     // 非递归层序排序遍历操作
@@ -128,6 +132,7 @@ public:
                 que.push(front->right_);
             }
         }
+        cout << endl;
     }
 
     // 求满足区间的元素值[i, j]
@@ -365,6 +370,7 @@ int main()
     bst.n_PreOrder();
     bst.n_InOrder();
     bst.n_LevelOrder();
+    bst.n_PostOrder();
     cout << endl;
 
     vector<int> vec;
