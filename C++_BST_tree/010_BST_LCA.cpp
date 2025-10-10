@@ -250,6 +250,28 @@ public:
             return node->data_;
         }
     }
+
+    // 镜像翻转
+    void mirror01()
+    {
+        mirror01(root_);
+    }
+
+    // 测试LCA问题
+    void test03()
+    {
+        int arr[] = {58,24,67,0,34,62,69,5,41,64,78};
+        BSTree<int> bst;
+        for(auto v:arr)
+        {
+            bst.insert(v);
+        }
+
+        bst.n_InOrder();
+        bst.mirror01();
+        bst.n_InOrder();
+    }
+
 private:
     struct Node
     {
@@ -402,6 +424,21 @@ private:
         }
     }
 
+    // 镜像翻转代码实现
+    void mirror01(Node* node)
+    {
+        if(node == nullptr)
+            return;
+
+        // V
+        Node* tmp = node->left_;
+        node->left_ = node->right_;
+        node->right_ = tmp;
+
+        mirror01(node->left_); // L
+        mirror01(node->right_); // R
+    }
+
     Node* root_; // 指向BST树的根节点
     Compare comp_; // 定义一个函数对象
 };
@@ -415,24 +452,26 @@ int main()
         bst.insert(v);
     }
 
-    bst.n_PreOrder();
-    bst.n_InOrder();
-    bst.n_LevelOrder();
-    bst.n_PostOrder();
-    cout << endl;
+    // bst.n_PreOrder();
+    // bst.n_InOrder();
+    // bst.n_LevelOrder();
+    // bst.n_PostOrder();
+    // cout << endl;
 
-    vector<int> vec;
-    bst.FindValues(vec,10,60);
-    for(auto v:vec)
-    {
-        cout << v << " ";
-    }
-    cout << endl;
+    // vector<int> vec;
+    // bst.FindValues(vec,10,60);
+    // for(auto v:vec)
+    // {
+    //     cout << v << " ";
+    // }
+    // cout << endl;
 
     // cout << bst.IsBSTree_error() << endl;
     // bst.test();
     // bst.test01();
-    bst.test02();
+    // bst.test02();
+
+    bst.test03();
 
     return 0;
 }
