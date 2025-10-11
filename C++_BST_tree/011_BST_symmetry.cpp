@@ -4,6 +4,7 @@ using namespace std;
 #include<stack>
 #include<queue>
 #include<vector>
+#include<cmath>
 
 // BST树代码实现
 template<typename T, typename Compare=less<T>>
@@ -257,6 +258,32 @@ public:
         bst.n_PreOrder();
         bst.n_InOrder();           
     }
+    
+    // 递归求二叉树层数
+    int high()
+    {
+        return high(root_);
+    }
+
+    // 判断平衡树
+    // bool IsBalance()
+    // {
+    //     return IsBalance(root_, l);
+    // }
+
+    // 判断平衡树
+    bool IsBalance()
+    {
+        int l = 0;
+        bool flag = true;
+        IsBalance02(root_, l, flag);
+        return flag;
+    }
+
+    void test06()
+    {
+
+    }
 
 private:
     struct Node
@@ -466,6 +493,65 @@ private:
         return node;
     }
 
+    // 递归求二叉树层数 求以node为根节点的子树的高度并返回高度值
+    int high(Node* node)
+    {
+        if(node == nullptr)
+        {
+            return 0;
+        }
+        int left = high(node->left_);
+        int right = high(node->right_);
+
+        return left > right ? left + 1 : right + 1;
+    }
+
+    // 判断平衡树代码实现 (效率比较低)
+    bool IsBalance(Node* node)
+    {
+        if(node == nullptr)
+        {
+            return true;
+        }
+        if(!IsBalance(node->left_)) // L
+        {
+            return false;
+        }
+        if(!IsBalance(node->right_)) // R
+        {
+            return false;
+        }
+
+        int left = high(node->left_);
+        int right = high(node->right_);
+        return abs(left - right) <= 1;
+    }
+
+    // 判断平衡树 效率高 递归过程中，记录节点的高度值 返回节点高度值
+    int IsBalance02(Node* node , int l, bool & flag)
+    {
+        if(node == nullptr)
+        {
+            return l;
+        }
+
+        int left = IsBalance02(node->left_, l+1, flag);
+        if(!flag)
+        {
+            return left;
+        }
+        int right = IsBalance02(node->right_, l+1, flag);
+        if(!flag)
+        {
+            return right;
+        }
+        if(abs(left - right) > 1) // 节点失衡了
+        {
+            flag = false;
+        }   
+        return max(left,right);
+    }
+
     Node* root_; // 指向BST树的根节点
     Compare comp_; // 定义一个函数对象
 };
@@ -479,6 +565,9 @@ int main()
         bst.insert(v);
     }
 
+    cout << bst.IsBalance() << endl;
+    bst.insert(12);
+    cout << bst.IsBalance() << endl;  
     // bst.n_PreOrder();
     // bst.n_InOrder();
     // bst.n_LevelOrder();
@@ -500,7 +589,7 @@ int main()
 
     // bst.test03();
     // bst.test04();
-    bst.test05();
+    // bst.test05();
 
     return 0;
 }
