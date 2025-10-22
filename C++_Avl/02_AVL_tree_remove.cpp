@@ -3,6 +3,7 @@
 using namespace std;
 #include<cmath>
 
+// AVL树 二叉平衡搜索树
 template <typename T>
 class AvlTree
 {
@@ -17,6 +18,11 @@ public:
         root_ = insert(root_,val);
     }
 
+    // 删除操作
+    void remove(const T&val)
+    {
+        root_ = remove(root_,val);
+    }
 private:
 
     // 定义AVL树节点类型
@@ -138,6 +144,104 @@ private:
         return node;
     }
 
+    // 删除操作实现
+    Node* remove(Node* node,const T&val)
+    {
+        if(node == nullptr)
+        {
+            return nullptr;
+        }
+        if(node->data_ > val)
+        {
+            node->left_ = remove(node->left_,val);
+            // 左子树删除节点，可能造成右子树太高
+            if(height(node->right_) - height(node->left_) > 1)
+            {
+                if(height(node->right_->right_) >= height(node->right_->left_))
+                {
+                    // 右孩子的右子树太高
+                    node = LeftRotate(node);
+                }
+                else
+                {
+                    // 右孩子的左子树太高
+                    node = RightBalance(node);
+                }
+            }
+        }
+        else if(node->data_ < val)
+        {
+            node->right_ = remove(node->right_,val);
+            // 右子树删除节点，可能造成左子树太高
+            if(height(node->left_) - height(node->right_) > 1)
+            {
+                if(height(node->left_->left_) >= height(node->left_->right_))
+                {
+                    // 左孩子的左子树太高
+                    node = RightRotate(node);
+                }
+                else
+                {
+                    // 左孩子的右子树太高
+                    node = LeftBalance(node);
+                }
+            }
+        }
+        else
+        {
+            // 找到了，先处理有两个孩子的节点删除情况
+            if(node->left_ != nullptr && node->right_ != nullptr)
+            {
+                // 为了避免删除前驱或者后继节点造成节点失衡，谁高删除谁
+                if(height(node->left_) >= height(node->right_) )
+                {
+                    // 删前驱
+                    Node* pre = node->left_;
+                    while(pre->right_ != nullptr)
+                    {
+                        pre = pre->right_;
+                    }
+                    node->data_ = pre->data_;
+                    node->left_ = remove(node->left_,pre->data_); // 删除前驱节点
+                }
+                else
+                {
+                    // 删后继
+                    Node* post = node->right_;
+                    while(post->left_ != nullptr)
+                    {
+                        post = post->left_;
+                    }
+                    node->data_ = post->data_;
+                    node->right_ = remove(node->right_,post->data_); // 删除后继节点            
+                }
+            }
+            else // 删除节点，最多有一个孩子
+            {
+                if(node->left_ != nullptr)
+                {
+                    Node* left = node->left_;
+                    delete node;
+                    return left;
+                }
+                else if(node->right_ != nullptr)
+                {
+                    Node* right = node->right_;
+                    delete node;
+                    return right;
+                }
+                else
+                {
+                    return nullptr;
+                }
+            }
+        }
+        // 更新节点高度
+        node->height_ = max(height(node->left_), height(node->right_)) + 1;
+
+        return node; // 递归回溯过程中，把当前节点给父节点返回
+    }
+
     Node* root_; // 指向根节点
 };
 
@@ -149,5 +253,7 @@ int main()
         avl.insert(i);
     }
     
+    avl.remove(9);
+    avl.remove(10);
     return 0;
 }
