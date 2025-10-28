@@ -6,6 +6,9 @@ template<typename T>
 class RBTree
 {
 public:
+    RBTree()
+    : root_(nullptr)
+    {}
 
 private:
     // 节点颜色
