@@ -11,6 +11,19 @@ double MiddleValue(vector<int>&nums1, int length1, vector<int>&nums2, int length
         return MiddleValue(nums2,length2,nums1,length1); // 在短的数组中求解合适的值
     }
 
+    if(length1 = 0)
+    {
+        int k = (length2 - 1) /2;
+        if(length2 % 2 == 0)
+        {
+            return (nums2[k] + nums2[k+1]) * 1.0 /2;
+        }
+        else
+        {
+            return nums2[k];
+        }
+    }
+
     int i = 0;
     int j = 0;
     int begin = 0;
