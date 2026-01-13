@@ -12,6 +12,29 @@ No        1 2 3 4 5 6  7  8  9  10 11 12    c =12
 5(5,6)    0 0 0 0 6 6 6  6  6  6  6  6      yes
 */
 
+void BackStrace(int w[], int v[], int n, int c,int **dp)
+{
+    int bestv = 0;
+    for(int i = 0; i<n;i++)
+    {
+        if(dp[i][c] != dp[i+1][c])
+        {
+            // 选择了第i个物品
+            cout << w[i] << " ";
+            bestv += v[i];
+            c -= w[i];
+        }
+    }
+    // 单独处理最后一行（也就是最后一个物品）
+    if(dp[n][c] > 0)
+    {
+        cout << w[n] << " ";
+        bestv += v[n];
+    }
+    cout << endl;
+    cout << "背包的最大价值是："  << bestv << endl;
+}
+
 int main()
 {
     int w[] = {8,6,4,2,5};
@@ -56,15 +79,17 @@ int main()
         }
     }
 
-    // 打印dp数组
-    for(int i = 0;i<=n;i++)
-    {
-        for(int j =1;j<=c;j++)
-        {
-            cout << dp[i][j] << " ";
-        }
-        cout << endl;
-    }
+    // // 打印dp数组
+    // for(int i = 0;i<=n;i++)
+    // {
+    //     for(int j =1;j<=c;j++)
+    //     {
+    //         cout << dp[i][j] << " ";
+    //     }
+    //     cout << endl;
+    // }
+
+    BackStrace(w,v,n, c,dp);
 
     // 释放dp数组的内存
     for(int i =0; i<n+1;i++)
